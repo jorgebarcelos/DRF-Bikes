@@ -11,6 +11,8 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 class BikesSerializer(serializers.ModelSerializer):
+
+    ratings = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Bikes
         fields = "__all__"

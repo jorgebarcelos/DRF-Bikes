@@ -1,6 +1,7 @@
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import permissions
 
 from rest_framework.generics import get_object_or_404
 from .models import Bikes, Rating
@@ -40,16 +41,25 @@ class RatingApiView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BikesViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.DjangoModelPermissions,)
     queryset = Bikes.objects.all()
     serializer_class = BikesSerializer
 
     @action(detail=True, methods=['get'])
     def bike_ratings(self, request, pk=None):
-        bikes = self.get_object()
-        serializer = RatingSerializer(bikes.ratings.all(), many=True)
+        self.pagination_class.page_size = 1
+        ratings = Rating.objects.filter(bike_id=pk)
+        page = self.paginate_queryset(ratings)
+
+        if page is not None:
+            serializer = RatingSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = RatingSerializer(ratings, many=True)
         return Response(serializer.data)
 
 
 class RatingViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.DjangoModelPermissions,)
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer

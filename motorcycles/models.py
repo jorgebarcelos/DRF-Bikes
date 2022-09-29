@@ -17,6 +17,7 @@ class Bikes(Base):
     class Meta:
         verbose_name = "Bike"
         verbose_name_plural = "Bikes"
+        ordering = ['id']
 
     def __str__(self):
         return self.model_name
@@ -33,6 +34,7 @@ class Rating(Base):
         verbose_name = "Score"
         verbose_name_plural = "Scores"
         unique_together = ["email", "bike"]
+        ordering = ['id']
 
     def __str__(self):
         return f"{self.person_name} reted {self.bike} with the score {self.score}"

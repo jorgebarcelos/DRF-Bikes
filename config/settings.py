@@ -8,6 +8,8 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
+
+token: '2058def7d1467c7cb1a6d2d9ff282a98b8a0a5d7'
 """
 
 import os
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
 
     'django_filters',
     'rest_framework',
+    'rest_framework.authtoken',
     
     'motorcycles',
 ]
@@ -138,9 +141,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    )
-}
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2
+    # ' DEFAULT_PAGINATION_CLASS ': ' rest_framework.pagination . PageNumberPagination ',
+    # ' PAGE_SIZE ': 2
+}   
