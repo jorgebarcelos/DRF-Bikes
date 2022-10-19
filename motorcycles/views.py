@@ -2,6 +2,7 @@ from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import permissions
+from .permissions import IsSuperUser
 
 from rest_framework.generics import get_object_or_404
 from .models import Bikes, Rating
@@ -41,7 +42,9 @@ class RatingApiView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BikesViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (
+        IsSuperUser,
+        permissions.DjangoModelPermissions,)
     queryset = Bikes.objects.all()
     serializer_class = BikesSerializer
 
